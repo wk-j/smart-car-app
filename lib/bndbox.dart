@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'models.dart';
+
 class BndBox extends StatelessWidget {
   final List<dynamic> results;
   final int previewH;
@@ -13,15 +14,21 @@ class BndBox extends StatelessWidget {
   final Socket channel;
 
   BndBox(this.results, this.previewH, this.previewW, this.screenH, this.screenW,
-      this.model,{@required this.channel});
+      this.model,
+      {@required this.channel});
 
   // get http => 'https://us-central1-smartcar-e0ddc.cloudfunctions.net/addMessage?text=33';
   @override
   Widget build(BuildContext context) {
     for (var i = 0; i < results.length; i++) {
-      if (results[i]["detectedClass"] == "person" && results[i]["confidenceInClass"]> 0.5) {
-        //  &&results[i]["confidenceInClass:"] > 0.5
+      var object = results[i]["detectedClass"];
+      var confidence = results[i]["confidenceInClass"];
+
+      if (object == "person" && confidence > 0.5) {
+        debugPrint("start trigger ...");
         channel.write("F\n");
+        debugPrint("end trigger");
+
         print("F");
       }
     }
